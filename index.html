@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VisitFlow | Smart Visitor Counter</title>
+
+    <!-- ADMIN AUTHENTICATION -->
+    <script>
+        const adminToken = sessionStorage.getItem("adminToken");
+
+        if (!adminToken) {
+            window.location.replace("login.html");
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">◈ VISIT<span>FLOW</span></div>
+
+        <p class="menu-label">MAIN MENU</p>
+
+        <a class="nav active" href="#">▦ Dashboard</a>
+        <a class="nav" href="#liveVisitors">◉ Live Visitors</a>
+        <a class="nav" href="#analytics">▤ Analytics</a>
+        <a class="nav" href="#history">◷ History</a>
+
+        <div class="sidebar-bottom">
+
+            <p class="menu-label">SYSTEM</p>
+
+            <a class="nav" href="#">⚙ Settings</a>
+
+            <!-- ADMIN PROFILE -->
+            <div class="profile">
+
+                <div class="avatar">A</div>
+
+                <div>
+                    <strong id="adminName">Admin</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+            <!-- LOGOUT BUTTON -->
+            <button
+                id="logoutButton"
+                onclick="logoutAdmin()"
+                style="
+                    width:100%;
+                    margin-top:15px;
+                    padding:12px;
+                    background:#dc2626;
+                    color:white;
+                    border:none;
+                    border-radius:8px;
+                    cursor:pointer;
+                    font-weight:bold;
+                "
+            >
+                ↪ Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN DASHBOARD -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <h2>Dashboard Overview</h2>
+                <p>Monitor your visitor activity in real time.</p>
+            </div>
+
+            <div class="status">
+                <span class="pulse"></span>
+                SYSTEM ONLINE
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME SECTION -->
+        <section class="welcome">
+
+            <div>
+                <span class="eyebrow">VISITOR ANALYTICS PLATFORM</span>
+
+                <h1>Welcome to VisitFlow.</h1>
+
+                <p>
+                    Track, monitor and understand your visitor traffic.
+                </p>
+            </div>
+
+            <div class="welcome-icon">◈</div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>Total Visitors</span>
+                <h2 id="totalVisitors">0</h2>
+                <small>All recorded visits</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Today's Visitors</span>
+                <h2 id="todayVisitors">0</h2>
+                <small>Visits today</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Last 7 Days</span>
+                <h2 id="weeklyVisitors">0</h2>
+                <small>Weekly activity</small>
+            </div>
+
+            <div class="stat-card">
+                <span>Latest Activity</span>
+                <h2 id="latestActivity">--</h2>
+                <small>Most recent visit</small>
+            </div>
+
+        </section>
+
+
+        <!-- CHART AND VISITOR ENTRY -->
+        <section class="content-grid" id="analytics">
+
+            <!-- VISITOR CHART -->
+            <div class="panel chart-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h3>Visitor Traffic</h3>
+                        <p>Daily visitor activity</p>
+                    </div>
+
+                    <span class="live-tag">LIVE DATA</span>
+
+                </div>
+
+                <canvas id="visitorChart"></canvas>
+
+            </div>
+
+
+            <!-- REGISTER VISITOR -->
+            <div class="panel action-panel" id="liveVisitors">
+
+                <span class="eyebrow">DEMO SIMULATION</span>
+
+                <h3>Visitor Entry</h3>
+
+                <p>
+                    Simulate a new visitor entering your platform.
+                </p>
+
+                <div class="counter-circle">
+
+                    <span id="liveCounter">0</span>
+
+                    <small>TOTAL VISITS</small>
+
+                </div>
+
+                <button id="visitorButton" onclick="addVisitor()">
+                    + Register Visitor
+                </button>
+
+                <button id="exportButton" onclick="exportVisitors()">
+                    ⬇ Export CSV
+                </button>
+
+                <small class="note">
+                    Each click registers one demo visit.
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- VISITOR ACTIVITY -->
+        <section class="panel activity-panel" id="history">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h3>Recent Visitor Activity</h3>
+                    <p>Latest registered visitor events</p>
+                </div>
+
+                <span class="live-tag">ACTIVITY LOG</span>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div class="search-container">
+
+                <input
+                    type="text"
+                    id="visitorSearch"
+                    placeholder="Search by Visitor ID..."
+                    oninput="searchVisitors()"
+                />
+
+            </div>
+
+
+            <!-- DATE FILTER -->
+            <div class="date-filter-container">
+
+                <div>
+                    <label for="fromDate">From Date</label>
+
+                    <input
+                        type="date"
+                        id="fromDate"
+                        onchange="filterVisitors()"
+                    />
+                </div>
+
+                <div>
+                    <label for="toDate">To Date</label>
+
+                    <input
+                        type="date"
+                        id="toDate"
+                        onchange="filterVisitors()"
+                    />
+                </div>
+
+                <button
+                    id="clearFilterButton"
+                    onclick="clearFilters()"
+                >
+                    Clear Filters
+                </button>
+
+            </div>
+
+
+            <!-- VISITOR TABLE -->
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>VISITOR ID</th>
+                            <th>DATE</th>
+                            <th>TIME</th>
+                            <th>SOURCE</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="activityTable">
+
+                        <tr>
+                            <td colspan="5">
+                                No visitor activity yet.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+            VISITFLOW © 2026 | SMART VISITOR COUNTER
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- AUTHENTICATION AND DASHBOARD JAVASCRIPT -->
+<script>
+
+    // VERIFY ADMIN SESSION WITH BACKEND
+    async function verifyAdminSession() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:5000/api/admin/profile",
+                {
+                    headers: {
+                        "Authorization": `Bearer ${adminToken}`
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                sessionStorage.removeItem("adminToken");
+                sessionStorage.removeItem("adminEmail");
+
+                window.location.replace("login.html");
+                return false;
+            }
+
+            // DISPLAY ADMIN EMAIL
+            const adminName = document.getElementById("adminName");
+
+            if (adminName && data.admin) {
+                adminName.textContent = data.admin.email;
+            }
+
+            console.log("Admin session verified successfully");
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Authentication error:", error);
+
+            alert("Unable to connect to the server. Please try again.");
+
+            return false;
+        }
+    }
+
+
+    // ADMIN LOGOUT
+    function logoutAdmin() {
+
+        sessionStorage.removeItem("adminToken");
+        sessionStorage.removeItem("adminEmail");
+
+        window.location.replace("login.html");
+    }
+
+
+    // VERIFY BEFORE LOADING DASHBOARD SCRIPT
+    verifyAdminSession().then((authenticated) => {
+
+        if (authenticated) {
+
+            const dashboardScript = document.createElement("script");
+
+            dashboardScript.src = "script.js";
+
+            document.body.appendChild(dashboardScript);
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

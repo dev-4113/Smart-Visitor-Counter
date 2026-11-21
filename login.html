@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisitFlow | Admin Login</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #07111f;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 420px;
+            padding: 40px;
+            background: #101e30;
+            border: 1px solid #243b55;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.35);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand h1 {
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+
+        .brand p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .login-container label {
+            display: block;
+            margin: 18px 0 8px;
+            color: #cbd5e1;
+        }
+
+        .login-container input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: #0b1727;
+            color: white;
+            outline: none;
+        }
+
+        .login-container input:focus {
+            border-color: #38bdf8;
+        }
+
+        .login-container button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #0ea5e9;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background: #0284c7;
+        }
+
+        #message {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: #f87171;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="brand">
+            <h1>VisitFlow</h1>
+            <p>Smart Visitor Counter · Admin Portal</p>
+        </div>
+
+        <form id="loginForm">
+
+            <label for="email">Admin Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter admin email"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter admin password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit" id="loginButton">
+                Sign In
+            </button>
+
+            <p id="message" role="status"></p>
+
+        </form>
+
+        <div class="footer">
+            Secure Admin Authentication
+        </div>
+
+    </div>
+
+    <script src="login.js"></script>
+
+</body>
+</html>
